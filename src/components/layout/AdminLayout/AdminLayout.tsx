@@ -4,18 +4,17 @@ import Cookies from "js-cookie";
 
 import "./style.scss";
 import { TOKEN, USER, USER_ID } from "../../../constants";
-import User from "../../../types/user";
 import avatar from "../../../assets/avatar.jpg";
 import request from "../../../server";
 
 const AdminLayout = () => {
   const [activeMenuItem, setActiveMenuItem] = useState("dashboard");
   const [sidebarVisible, setSidebarVisible] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
   const [userId, setUserId] = useState("");
   const [total, setTotal] = useState<string | number>(0);
   
-
+   
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -27,19 +26,19 @@ const AdminLayout = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  function getUser() {
-    const userString = localStorage.getItem(USER);
-    if (userString) {
-      const parsedUser = JSON.parse(userString);
-      setUser(parsedUser);
-    }
-  }
+  // function getUser() {
+  //   const userString = localStorage.getItem(USER);
+  //   if (userString) {
+  //     const parsedUser = JSON.parse(userString);
+  //     setUser(parsedUser);
+  //   }
+  // }
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
   };
   useEffect(() => {
-    getUser();
+    // getUser();
     getExpriences();
   }, []);
 
@@ -69,6 +68,10 @@ const AdminLayout = () => {
       console.log("success");
       
     }
+  }
+
+  const AccountN = () => {
+    navigate('/account')
   }
 
   return (
@@ -166,7 +169,7 @@ const AdminLayout = () => {
                 <i className="bx bxs-user-circle"></i> view profile
               </Link>
             </button>
-            <button>
+            <button onClick={AccountN}>
               <i className="bx bxs-user-account"></i> Account
             </button>
             <button>

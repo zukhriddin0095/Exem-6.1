@@ -11,6 +11,7 @@ import ExpriencesPage from "./pages/dashboard/Expriences";
 import PortfoliosPage from "./pages/portfolios/PortfoliosPage";
 import EducationPage from "./pages/Education/EducationPage";
 import UserPage from "./pages/UserPage/UserPage";
+import AccountPage from "./pages/account/AccountPage";
 function App() {
   const isAuthenticated = useAuth((state) => state.isAuthenticated);
   const user = useAuth((state) => state.user);
@@ -37,6 +38,7 @@ function App() {
             <Route path="/portfolios" element={<PortfoliosPage />} />
             <Route path="/education" element={<EducationPage />} />
             <Route path="/message" element={<MessagePage />} />
+            <Route path="/account" element={<AccountPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

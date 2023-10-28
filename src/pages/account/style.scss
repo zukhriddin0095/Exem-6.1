@@ -1,0 +1,106 @@
+.updateinfo {
+  margin: 30px;
+  background: #cac9c9;
+  border-radius: 30px;
+  &__form {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    &__firstName {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__lastName {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__username {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__Photo {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__fields {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__phoneNumber {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__birthday {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__address {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__email {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__github {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__linkedin {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__telegram {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    &__instagram {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    label {
+      padding-left: 5px;
+      color: rgb(14, 14, 14);
+    }
+    input {
+      padding: 8px;
+      width: 50%;
+      border-radius: 15px;
+      border: none;
+    }
+    button {
+      padding: 8px;
+      width: 20%;
+      border-radius: 15px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: 0.3s;
+      &:hover {
+        border: 2px solid #038d01;
+      }
+      &:active {
+        transform: scale(0.8);
+      }
+    }
+  }
+}
