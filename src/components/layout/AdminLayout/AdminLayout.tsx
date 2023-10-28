@@ -41,7 +41,7 @@ const AdminLayout = () => {
   useEffect(() => {
     getUser();
     getExpriences();
-  }, [userId, user]);
+  }, []);
 
   function logout() {
     Cookies.remove(TOKEN);

@@ -11,8 +11,6 @@ const MessagePage = () => {
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState<string | number>(0);
 
-
-
   useEffect(() => {
     getMessage();
   }, [userId]);
@@ -41,11 +39,12 @@ const MessagePage = () => {
   }
 
   const deleteMessage = async (id: string) => {
-    if(confirm("Haqiqatdan ham o'chirishni hohlasizmi")){
+    if (confirm("Haqiqatdan ham o'chirishni hohlasizmi")) {
       await request.delete(`messages/${id}`);
-      getMessage()
+      getMessage();
     }
-  }
+  };
+  
   return (
     <Fragment>
       {loading ? (
