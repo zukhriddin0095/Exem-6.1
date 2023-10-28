@@ -1,0 +1,138 @@
+.experiences {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  background: #00000045;
+  backdrop-filter: blur(10px);
+  transition: 0.5s;
+  .experiences__form {
+    width: 40%;
+    padding: 50px;
+    position: fixed;
+    top: 15%;
+    left: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: 1px solid #050505;
+    background: #a4a4a4;
+    border-radius: 20px;
+    transition: 0.5s;
+    opacity: 1;
+    z-index: 1;
+    &__workName {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      label {
+        padding-left: 5px;
+        color: rgb(255, 255, 255);
+        font-size: 18px;
+      }
+      input {
+        padding: 8px;
+        border-radius: 10px;
+        border: 1px solid #000;
+      }
+    }
+    &__companyName {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      label {
+        padding-left: 5px;
+        color: rgb(255, 255, 255);
+        font-size: 18px;
+      }
+      input {
+        padding: 8px;
+        border-radius: 10px;
+        border: 1px solid #000;
+      }
+    }
+    &__description {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      label {
+        padding-left: 5px;
+        color: rgb(255, 255, 255);
+        font-size: 18px;
+      }
+      input {
+        padding: 8px;
+        border-radius: 10px;
+        border: 1px solid #000;
+      }
+    }
+    &__startDate {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      label {
+        padding-left: 5px;
+        color: rgb(255, 255, 255);
+        font-size: 18px;
+      }
+      input {
+        padding: 8px;
+        border-radius: 10px;
+        border: 1px solid #000;
+      }
+    }
+    &__endDate {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      label {
+        padding-left: 5px;
+        color: rgb(255, 255, 255);
+        font-size: 18px;
+      }
+      input {
+        padding: 8px;
+        border-radius: 10px;
+        border: 1px solid #000;
+      }
+    }
+    &__btn {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+    }
+  }
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    i {
+      font-size: 35px;
+      color: #fff;
+    }
+  }
+}
+
+.experiencesActive {
+  display: none;
+}
+
+.adding__btn {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 5px;
+  border: none;
+  background: #fff;
+  transition: 0.2s;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.1);
+    transition: 0.2s;
+    border: 1px solid rgb(0, 173, 23);
+  }
+}
