@@ -2,8 +2,7 @@ import { Fragment, useState } from "react";
 import request from "../../server";
 import { toast } from "react-toastify";
 
-
-import "./style.scss"
+import "./style.scss";
 const AccountPage = () => {
   const [values, setValues] = useState({
     firstName: "",
@@ -24,7 +23,11 @@ const AccountPage = () => {
     photo: "",
   });
   const [photo, setPhoto] = useState(null);
-
+  const [formData, setFormData] = useState({
+    username: "",
+    currentPassword: "",
+    newPassword: "",
+  });
 
   async function uploadImage(e: React.ChangeEvent<HTMLInputElement>) {
     try {
@@ -41,35 +44,53 @@ const AccountPage = () => {
     }
   }
 
-
-
-   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-     const { name, value } = event.target;
-     setValues({
-       ...values,
-       [name]: value,
-     });
-   };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
 
   async function handeOk(e: React.FormEvent) {
     e.preventDefault();
     const user = { ...values, photo: photo };
     try {
-        await request.put("auth/updatedetails", user);
-        toast.success("success")
+      await request.put("auth/updatedetails", user);
+      toast.success("success");
     } finally {
       console.log("");
-      
     }
   }
 
- 
+  
+
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await request.put("auth/updatepassword", formData);
+      toast.success("success");
+    }catch(err){
+      toast.error("serverda hatolik")
+    } finally {
+      console.log("");
+    }
+  };
 
   return (
     <Fragment>
-      <section>
+      <section className="account">
         <div className="updateinfo">
           <form onSubmit={handeOk} className="updateinfo__form">
+            <h1>Edit your information</h1>
             <div className="updateinfo__form__firstName">
               <label>First Name</label>
               <input
@@ -214,7 +235,31 @@ const AccountPage = () => {
           </form>
         </div>
         <div className="update__password">
-          <form action=""></form>
+          <h1>update password</h1>
+          <form className="update__password__form" onSubmit={handleSubmit}>
+            <label>username</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handlePassword}
+            />
+            <label>Current password</label>
+            <input
+              type="password"
+              name="currentPassword"
+              value={formData.currentPassword}
+              onChange={handlePassword}
+            />
+            <label>new password</label>
+            <input
+              type="password"
+              name="newPassword"
+              value={formData.newPassword}
+              onChange={handlePassword}
+            />
+            <button type="submit">Submit</button>
+          </form>
         </div>
       </section>
     </Fragment>

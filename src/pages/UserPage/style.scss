@@ -1,0 +1,38 @@
+
+
+.userpage {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #0000005a;
+  &__wrapper {
+    padding: 30px;
+    width: 40%;
+    height: 40%;
+    border: 1px solid #282828;
+    background: #828282;
+    border-radius: 15px 30px 15px 30px;
+    @media(max-width: 850px) {
+      width: 60%;
+    }
+    @media(max-width: 570px) {
+      width: 80%;
+    }
+    @media(max-width: 470px) {
+      width: 95%;
+    }
+  }
+}
+
+.logout__user__sss {
+  padding: 8px;
+  position: absolute;
+  right: 30px;
+  top: 30px;
+  font-size: 35px;
+  border: none;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+}

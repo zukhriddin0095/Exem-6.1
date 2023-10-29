@@ -9,11 +9,12 @@ import Login from "../../types/login";
 import "./style.scss";
 import AccountType from "../../types/account";
 import User from "../../types/user";
+import AxiosLoading from "../../components/loading/axiosLoading/AxiosLoading";
 
 const LoginPage = () => {
   const login = useAuth((state) => state.login);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(false);
   const [formData, setFormData] = useState<Login>({
     username: "",
@@ -51,14 +52,14 @@ const LoginPage = () => {
     navigate("/expriences");
   }
 
-  const handleRegister = async(e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     try {
-     await request.post("auth/register", user);
-     navigate("/user")
-    }finally{
-      setLoading(false)
+      await request.post("auth/register", user);
+      navigate("/user");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,101 +74,110 @@ const LoginPage = () => {
 
   return (
     <Fragment>
-      <div className="Login">
-        <div
-          className={`container ${active ? "right-panel-active" : ""}`}
-          id="container"
-        >
-          <div className="form-container sign-up-container">
-            <form onSubmit={handleRegister}>
-              <h1>Create Account</h1>
-              <span>or use your email for registration</span>
-              <input
-                name="firstName"
-                type="text"
-                placeholder="Firstname"
-                value={user.firstName}
-                onChange={handleChange}
-              />
-              <input
-                name="lastName"
-                type="text"
-                placeholder="lastName"
-                value={user.lastName}
-                onChange={handleChange}
-              />
-              <input
-                name="username"
-                type="text"
-                placeholder="username"
-                value={user.username}
-                onChange={handleChange}
-              />
-              <input
-                name="password"
-                type="password"
-                placeholder="password"
-                value={user.password}
-                onChange={handleChange}
-              />
-              {loading ? <div>loading ....</div> : <button type="submit">Sign Up</button>}
-            </form>
-          </div>
-          {/* userName */}
-          <div className="form-container sign-in-container">
-            <form onSubmit={handleSubmit}>
-              <h1>Sign in</h1>
+      {loading ? (
+        <AxiosLoading />
+      ) : (
+        <div className="Login">
+          <div
+            className={`container ${active ? "right-panel-active" : ""}`}
+            id="container"
+          >
+            <div className="form-container sign-up-container">
+              <form onSubmit={handleRegister}>
+                <h1>Create Account</h1>
+                <span>or use your email for registration</span>
+                <input
+                  name="firstName"
+                  type="text"
+                  placeholder="Firstname"
+                  value={user.firstName}
+                  onChange={handleChange}
+                />
+                <input
+                  name="lastName"
+                  type="text"
+                  placeholder="lastName"
+                  value={user.lastName}
+                  onChange={handleChange}
+                />
+                <input
+                  name="username"
+                  type="text"
+                  placeholder="username"
+                  value={user.username}
+                  onChange={handleChange}
+                />
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="password"
+                  value={user.password}
+                  onChange={handleChange}
+                />
+                {loading ? (
+                  <div>loading ....</div>
+                ) : (
+                  <button type="submit">Sign Up</button>
+                )}
+              </form>
+            </div>
+            {/* userName */}
+            <div className="form-container sign-in-container">
+              <form onSubmit={handleSubmit}>
+                <h1>Sign in</h1>
 
-              <span>or use your account</span>
-              <input
-                name="username"
-                type="text"
-                placeholder="Username"
-                value={formData.username}
-                onChange={handleInputChange}
-              />
-              <input
-                name="password"
-                type="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleInputChange}
-              />
-              <a href="#">Forgot your password?</a>
-              <button>Sign In</button>
-            </form>
-          </div>
-          {/* userName */}
-          <div className="overlay-container">
-            <div className="overlay">
-              <div className="overlay-panel overlay-left">
-                <h1>Welcome Back!</h1>
-                <p>
-                  To keep connected with us please login with your personal info
-                </p>
-                <button
-                  onClick={() => setActive(false)}
-                  className="ghost"
-                  id="signIn"
-                >
-                  Sign In
-                </button>
-              </div>
-              <div className="overlay-panel overlay-right">
-                <h1>Hello, Friend!</h1>
-                <p>Enter your personal details and start journey with us</p>
-                <button
-                  onClick={() => setActive(true)}
-                  className="ghost"
-                  id="signUp"
-                >
-                  Sign Up
-                </button>
+                <span>or use your account</span>
+                <input
+                  name="username"
+                  type="text"
+                  placeholder="Username"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                />
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                />
+                <a href="#">Forgot your password?</a>
+                <button>Sign In</button>
+              </form>
+            </div>
+            {/* userName */}
+            <div className="overlay-container">
+              <div className="overlay">
+                <div className="overlay-panel overlay-left">
+                  <h1>Welcome Back!</h1>
+                  <p>
+                    To keep connected with us please login with your personal
+                    info
+                  </p>
+                  <button
+                    onClick={() => setActive(false)}
+                    className="ghost"
+                    id="signIn"
+                  >
+                    Sign In
+                  </button>
+                </div>
+                <div className="overlay-panel overlay-right">
+                  <h1>Hello, Friend!</h1>
+                  <p>Enter your personal details and start journey with us</p>
+                  <button
+                    onClick={() => setActive(true)}
+                    className="ghost"
+                    id="signUp"
+                  >
+                    Sign Up
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </Fragment>
   );
 };

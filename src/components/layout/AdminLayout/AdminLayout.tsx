@@ -1,12 +1,14 @@
 import { Fragment, useState, useEffect } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
-import "./style.scss";
+
 import { TOKEN, USER, USER_ID } from "../../../constants";
 import avatar from "../../../assets/avatar.jpg";
 import request from "../../../server";
 
+import "./style.scss";
 const AdminLayout = () => {
   const [activeMenuItem, setActiveMenuItem] = useState("dashboard");
   const [sidebarVisible, setSidebarVisible] = useState(true);
@@ -59,11 +61,11 @@ const AdminLayout = () => {
       } = await request.get(`messages`, {
         params: {
           whom: userId,
-          // page: page,
-          // limit: LIMIT,
         },
       });
       setTotal(pagination.total);
+    }catch(err) {
+      toast.error("serverda hatolik");
     } finally {
       console.log("success");
       

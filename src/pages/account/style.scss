@@ -1,4 +1,13 @@
+.account{
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 850px) {
+    flex-direction: column;
+  }
+}
+
 .updateinfo {
+  width: 90%;
   margin: 30px;
   background: #cac9c9;
   border-radius: 30px;
@@ -84,7 +93,49 @@
     }
     input {
       padding: 8px;
-      width: 50%;
+      width: 100%;
+      border-radius: 15px;
+      border: none;
+      
+    }
+    button {
+      padding: 8px;
+      width: 20%;
+      border-radius: 15px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: 0.3s;
+      &:hover {
+        border: 2px solid #038d01;
+      }
+      &:active {
+        transform: scale(0.8);
+      }
+    }
+  }
+}
+
+.update__password {
+  margin: 30px;
+  width: 90%;
+  height: 380px;
+  background: #cac9c9;
+  border-radius: 30px;
+  h1 {
+    padding-top: 30px;
+    padding-left: 30px;
+  }
+  .update__password__form {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    label {
+      margin-bottom: 10px;
+    }
+    input {
+      margin-bottom: 20px;
+      padding: 8px;
+      width: 100%;
       border-radius: 15px;
       border: none;
     }

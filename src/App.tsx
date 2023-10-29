@@ -28,18 +28,19 @@ function App() {
               isAuthenticated && user?.role === "client" ? (
                 <AdminLayout />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/user" />
               )
             }
           >
             <Route path="/expriences" element={<ExpriencesPage />} />
-            <Route path="/user" element={<UserPage />} />
             <Route path="/skills" element={<SkillsPage />} />
             <Route path="/portfolios" element={<PortfoliosPage />} />
             <Route path="/education" element={<EducationPage />} />
             <Route path="/message" element={<MessagePage />} />
             <Route path="/account" element={<AccountPage />} />
+            <Route path="*" element={<Navigate to="/expriences" />} />
           </Route>
+          <Route path="/user" element={<UserPage />} />
         </Routes>
       </BrowserRouter>
     </Fragment>
