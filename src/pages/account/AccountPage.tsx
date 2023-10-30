@@ -8,10 +8,12 @@ import avatar from "../../assets/avatar.jpg";
 import "./style.scss";
 import { USER_ID } from "../../constants";
 import User from "../../types/user";
+import { useNavigate } from "react-router-dom";
 
 const AccountPage = () => {
   const [userId, setUserId] = useState("");
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate()
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
@@ -67,6 +69,7 @@ const AccountPage = () => {
     try {
       await request.put("auth/updatedetails", values);
       toast.success("success");
+      navigate('/')
     } finally {
       console.log("");
     }
@@ -85,6 +88,7 @@ const AccountPage = () => {
     try {
       await request.put("auth/updatepassword", formData);
       toast.success("success");
+      navigate("/")
     } catch (err) {
       toast.error("serverda hatolik");
     } finally {

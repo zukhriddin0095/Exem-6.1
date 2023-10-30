@@ -27,9 +27,9 @@ function App() {
             element={
               isAuthenticated && user?.role === "client" ? (
                 <AdminLayout />
-              ) : (
+              ) :isAuthenticated ? (
                 <Navigate to="/user" />
-              )
+              ) : <Navigate to='/login' />
             }
           >
             <Route path="/expriences" element={<ExpriencesPage />} />

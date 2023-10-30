@@ -1,6 +1,6 @@
 import { useState, useEffect, Fragment } from "react";
 import User from "../../types/user";
-import { TOKEN, USER } from "../../constants";
+import { TOKEN, USER, USER_ID } from "../../constants";
 import Cookies from "js-cookie";
 
 
@@ -23,6 +23,7 @@ const UserPage = () => {
 
   function logout() {
     Cookies.remove(TOKEN);
+    Cookies.remove(USER_ID);
     localStorage.removeItem(USER);
     navigate("/login");
   }
