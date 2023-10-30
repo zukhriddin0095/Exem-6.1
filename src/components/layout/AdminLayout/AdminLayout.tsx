@@ -86,6 +86,7 @@ const AdminLayout = () => {
 
   console.log(user);
   const AccountN = () => {
+    setIsModalOpen(false)
     navigate("/account");
   };
 
@@ -99,7 +100,7 @@ const AdminLayout = () => {
       <section id="sidebar" className={sidebarVisible ? "hide" : ""}>
         <Link to="/" className="brand">
           <i className="bx bxs-smile"></i>
-          <span className="text">Admin Portfolio</span>
+          <span className="text">Client Portfolio</span>
         </Link>
         <ul className="side-menu top">
           <li className={activeMenuItem === "/expriences" ? "active" : ""}>
@@ -173,7 +174,13 @@ const AdminLayout = () => {
             <span className="num">{total}</span>
           </Link>
           <button onClick={showModal} className="profile">
-            <img src={avatar} alt="avatar" />
+            <img
+              src={
+                `https://ap-portfolio-backend.up.railway.app/upload/${user?.photo}` ||
+                avatar
+              }
+              alt="avatar"
+            />
           </button>
         </nav>
         <div
@@ -190,7 +197,7 @@ const AdminLayout = () => {
             />
           </div>
           <div className="user__modal__account">
-            <button>
+            <button onClick={() => setIsModalOpen(false)}>
               <Link target="_blank" to={externalUrl}>
                 <i className="bx bxs-user-circle"></i> view profile
               </Link>
@@ -198,7 +205,7 @@ const AdminLayout = () => {
             <button onClick={AccountN}>
               <i className="bx bxs-user-account"></i> Account
             </button>
-            <button>
+            <button onClick={() => setIsModalOpen(false)}>
               <i className="bx bx-cog"></i> Setting
             </button>
             <button>

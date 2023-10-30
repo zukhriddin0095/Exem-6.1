@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ENDPOINT, TOKEN } from "../constants";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 const request = axios.create({
   baseURL: `${ENDPOINT}api/v1/`,
@@ -11,13 +11,13 @@ const request = axios.create({
   },
 });
 
-request.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    toast.error(err.response?.data.message);
-    return Promise.reject(err);
-  }
-);
+// request.interceptors.response.use(
+//   (res) => res,
+//   (err) => {
+//     toast.error(err.response?.data.message);
+//     return Promise.reject(err);
+//   }
+// );
 
 
 

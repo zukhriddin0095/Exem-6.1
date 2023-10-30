@@ -8,7 +8,7 @@ import "./style.scss";
 import { useNavigate } from "react-router-dom";
 const UserPage = () => {
   const [user, setUser] = useState<User | null>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     function getUser() {
@@ -45,6 +45,14 @@ const UserPage = () => {
             <mark>Abdulaziz Toshpolatov</mark> ga murojat qiling shu nomerga
             +998999400807 etboringiz uchun rahmat!
           </h3>
+        </div>
+        <div className="btn-admin">
+          <button className="button">
+            <a href="tel:+998999400807">contact admin</a>
+          </button>
+          <button className="button">
+            <a href="mailto:nurmatovzukhriddin4@gmail.com">contact admin</a>
+          </button>
         </div>
       </div>
     </Fragment>

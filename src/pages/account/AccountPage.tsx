@@ -1,11 +1,17 @@
 import { Fragment, useState, useEffect } from "react";
+import Cookies from "js-cookie";
+
 import request from "../../server";
 import { toast } from "react-toastify";
 
-
-import avatar from "../../assets/avatar.jpg"
+import avatar from "../../assets/avatar.jpg";
 import "./style.scss";
+import { USER_ID } from "../../constants";
+import User from "../../types/user";
+
 const AccountPage = () => {
+  const [userId, setUserId] = useState("");
+  const [user, setUser] = useState<User | null>(null);
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
@@ -24,7 +30,7 @@ const AccountPage = () => {
     facebook: "",
     photo: "",
   });
-  const [image, setImage] = useState<File | null>(null);
+  // const [image, setImage] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     username: "",
     currentPassword: "",
@@ -38,8 +44,11 @@ const AccountPage = () => {
       if (e.target.files) {
         form.append("file", e.target.files[0]);
       }
-      const { data } = await request.post("upload", form);
-      setImage(data);
+      await request.post("auth/upload", form);
+      getUser();
+      toast.success("success");
+
+      // setImage(data);
     } finally {
       console.log("asdas");
     }
@@ -83,31 +92,22 @@ const AccountPage = () => {
     }
   };
 
-  // async function uploadImage(e: React.ChangeEvent<HTMLInputElement>) {
-  //   try {
-  //     const form = new FormData();
-  //     // form.append("file", e.target.files[0]);
-  //     if (e.target.files) {
-  //       form.append("file", e.target.files[0]);
-  //     }
-  //     const { data } = await request.post("upload", form);
-  //     setImage(data);
-  //     console.log(image);
-  //   } finally {
-  //     console.log("asdas");
-  //   }
-  // }
-  console.log(image);
-
-  const updateImage = async () => {
-    try {
-      await request.post("auth/upload", { photo: image });
-    } finally {
-      console.log("s");
+  async function getUser() {
+    const userId = Cookies.get(USER_ID);
+    if (userId !== undefined) {
+      setUserId(userId);
     }
-  };
+    try {
+      const { data } = await request.get(`users/${userId}`);
+      setUser(data);
+    } catch (err) {
+      toast.error("Serverda xatolik yuz berdi");
+    }
+  }
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getUser();
+  }, [userId]);
 
   const handleUploadClick = () => {
     const fileInput = document.getElementById(
@@ -260,7 +260,14 @@ const AccountPage = () => {
           <div className="update__photo">
             <div className="avatar-wrapper">
               <div className="upload-button" onClick={handleUploadClick}>
-                <img className="avatar_update" src={avatar} alt="avatar" />
+                <img
+                  className="avatar_update"
+                  src={
+                    `https://ap-portfolio-backend.up.railway.app/upload/${user?.photo}` ||
+                    avatar
+                  }
+                  alt="avatar"
+                />
               </div>
               <input
                 id="file-upload"
@@ -269,9 +276,11 @@ const AccountPage = () => {
                 accept="image/*"
                 onChange={(e) => uploadImage(e)}
               />
+              <h3 onClick={handleUploadClick} className="title-update">
+                update photo
+              </h3>
             </div>
           </div>
-          <button onClick={updateImage}>update photo</button>
           <h1>update password</h1>
           <form className="update__password__form" onSubmit={handleSubmit}>
             <label>username</label>

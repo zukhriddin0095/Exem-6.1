@@ -1,15 +1,17 @@
 import { Fragment, useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { USER_ID } from "../../constants";
+import { LIMIT, USER_ID } from "../../constants";
 import MessageType from "../../types/message";
 import request from "../../server";
 import AxiosLoading from "../../components/loading/axiosLoading/AxiosLoading";
+import { Pagination } from "antd";
 
 const MessagePage = () => {
   const [message, setMessage] = useState<MessageType[] | null>(null);
   const [userId, setUserId] = useState("");
   const [loading, setLoading] = useState(false);
-  const [total, setTotal] = useState<string | number>(0);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     getMessage();
@@ -27,8 +29,8 @@ const MessagePage = () => {
       } = await request.get(`messages`, {
         params: {
           whom: userId,
-          // page: page,
-          // limit: LIMIT,
+          page: page,
+          limit: LIMIT,
         },
       });
       setTotal(pagination.total);
@@ -44,7 +46,12 @@ const MessagePage = () => {
       getMessage();
     }
   };
-  
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    getMessage();
+  };
+
   return (
     <Fragment>
       {loading ? (
@@ -102,6 +109,13 @@ const MessagePage = () => {
                   ))}
                 </tbody>
               </table>
+              <Pagination
+                defaultCurrent={1}
+                pageSize={LIMIT}
+                total={total}
+                current={page}
+                onChange={handlePageChange}
+              />
             </div>
           </div>
         </main>
