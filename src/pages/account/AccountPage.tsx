@@ -1,7 +1,9 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import request from "../../server";
 import { toast } from "react-toastify";
 
+
+import avatar from "../../assets/avatar.jpg"
 import "./style.scss";
 const AccountPage = () => {
   const [values, setValues] = useState({
@@ -22,7 +24,7 @@ const AccountPage = () => {
     facebook: "",
     photo: "",
   });
-  const [photo, setPhoto] = useState(null);
+  const [image, setImage] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     username: "",
     currentPassword: "",
@@ -37,8 +39,7 @@ const AccountPage = () => {
         form.append("file", e.target.files[0]);
       }
       const { data } = await request.post("upload", form);
-      setPhoto(data);
-      console.log(photo);
+      setImage(data);
     } finally {
       console.log("asdas");
     }
@@ -54,16 +55,13 @@ const AccountPage = () => {
 
   async function handeOk(e: React.FormEvent) {
     e.preventDefault();
-    const user = { ...values, photo: photo };
     try {
-      await request.put("auth/updatedetails", user);
+      await request.put("auth/updatedetails", values);
       toast.success("success");
     } finally {
       console.log("");
     }
   }
-
-  
 
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -78,11 +76,44 @@ const AccountPage = () => {
     try {
       await request.put("auth/updatepassword", formData);
       toast.success("success");
-    }catch(err){
-      toast.error("serverda hatolik")
+    } catch (err) {
+      toast.error("serverda hatolik");
     } finally {
       console.log("");
     }
+  };
+
+  // async function uploadImage(e: React.ChangeEvent<HTMLInputElement>) {
+  //   try {
+  //     const form = new FormData();
+  //     // form.append("file", e.target.files[0]);
+  //     if (e.target.files) {
+  //       form.append("file", e.target.files[0]);
+  //     }
+  //     const { data } = await request.post("upload", form);
+  //     setImage(data);
+  //     console.log(image);
+  //   } finally {
+  //     console.log("asdas");
+  //   }
+  // }
+  console.log(image);
+
+  const updateImage = async () => {
+    try {
+      await request.post("auth/upload", { photo: image });
+    } finally {
+      console.log("s");
+    }
+  };
+
+  useEffect(() => {}, []);
+
+  const handleUploadClick = () => {
+    const fileInput = document.getElementById(
+      "file-upload"
+    ) as HTMLInputElement;
+    fileInput?.click();
   };
 
   return (
@@ -118,15 +149,6 @@ const AccountPage = () => {
                 name="username"
                 value={values.username}
                 onChange={handleChange}
-              />
-            </div>
-
-            <div className="updateinfo__form__photo">
-              <label>Photo</label>
-              <input
-                type="file"
-                name="Photo"
-                onChange={(e) => uploadImage(e)}
               />
             </div>
 
@@ -235,6 +257,21 @@ const AccountPage = () => {
           </form>
         </div>
         <div className="update__password">
+          <div className="update__photo">
+            <div className="avatar-wrapper">
+              <div className="upload-button" onClick={handleUploadClick}>
+                <img className="avatar_update" src={avatar} alt="avatar" />
+              </div>
+              <input
+                id="file-upload"
+                className="file-upload"
+                type="file"
+                accept="image/*"
+                onChange={(e) => uploadImage(e)}
+              />
+            </div>
+          </div>
+          <button onClick={updateImage}>update photo</button>
           <h1>update password</h1>
           <form className="update__password__form" onSubmit={handleSubmit}>
             <label>username</label>

@@ -41,6 +41,7 @@ function App() {
             <Route path="*" element={<Navigate to="/expriences" />} />
           </Route>
           <Route path="/user" element={<UserPage />} />
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </BrowserRouter>
     </Fragment>

@@ -1,14 +1,15 @@
 import React, { Fragment, useEffect, useState } from "react";
 import request from "../../server";
-import { ENDPOINT,  USER_ID } from "../../constants";
+import { ENDPOINT, LIMIT, USER_ID } from "../../constants";
 import Cookies from "js-cookie";
 import ProtfoliosType from "../../types/portfolio";
 import { Link } from "react-router-dom";
+import { Pagination } from "antd";
+import AxiosLoading from "../../components/loading/axiosLoading/AxiosLoading";
 
 import "./style.scss";
-import AxiosLoading from "../../components/loading/axiosLoading/AxiosLoading";
 const PortfoliosPage = () => {
-  const [total, setTotal] = useState<string | number>(0);
+  const [total, setTotal] = useState(0);
   const [portfolios, setPortfolios] = useState<ProtfoliosType[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
@@ -16,6 +17,7 @@ const PortfoliosPage = () => {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<string | number | null>(null);
   const [photo, setPhoto] = useState(null);
+  const [page, setPage] = useState(1);
   const [values, setValues] = useState({
     name: "",
     url: "",
@@ -23,10 +25,9 @@ const PortfoliosPage = () => {
     photo: "",
   });
 
-
   useEffect(() => {
     getPortfolios();
-  }, [userId]);
+  }, [userId, page, total]);
 
   async function uploadImage(e: React.ChangeEvent<HTMLInputElement>) {
     try {
@@ -55,8 +56,8 @@ const PortfoliosPage = () => {
       } = await request.get(`portfolios`, {
         params: {
           user: userId,
-          // page: page,
-          // limit: LIMIT,
+          page: page,
+          limit: LIMIT,
           search: search,
         },
       });
@@ -132,8 +133,17 @@ const PortfoliosPage = () => {
     e.preventDefault();
     setIsModalOpen(false);
   };
-  
 
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    getPortfolios();
+  };
+
+   const handeSearch = (e: React.FormEvent) => {
+     e.preventDefault();
+     getPortfolios();
+   };
+   
   return (
     <Fragment>
       {loading ? (
@@ -143,59 +153,79 @@ const PortfoliosPage = () => {
           <div className="portfolios__wrapper">
             <div className="head">
               <h3>portfolios ({total})</h3>
-              <input
-                onChange={(e) => setSearch(e.target.value)}
-                className="head__search"
-                type="text"
-                placeholder="Searching"
-              />
+              <form>
+                <div className="form-input">
+                  <input
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    type="search"
+                    placeholder="Search..."
+                  />
+                  <button
+                    onClick={(e) => handeSearch(e)}
+                    type="submit"
+                    className="search-btn"
+                  >
+                    <i className="bx bx-search"></i>
+                  </button>
+                </div>
+              </form>
               <button onClick={openModal}>
                 <i className="bx bx-add-to-queue"></i>
               </button>
             </div>
-            <ul className="responsive-table">
-              <li className="table-header">
-                <div className="col col-1">Name</div>
-                <div className="col col-2">url</div>
-                <div className="col col-3">Photo</div>
-                <div className="col col-4">ACtions</div>
-              </li>
-              {portfolios?.map((port) => (
-                <li key={port._id} className="table-row">
-                  <div className="col col-1" data-label="Job Id">
-                    {port?.name}
-                  </div>
-                  <div className="col col-2" data-label="Customer Name">
-                    <Link to={port?.url}>{port?.url}</Link>
-                  </div>
-                  <div className="col col-2" data-label="Customer Name">
-                    <img
-                      className="avatar"
-                      src={`${ENDPOINT}upload/${port?.photo?._id}.${
-                        port?.photo?.name.split(".")[1]
-                      }`}
-                      alt=""
-                    />
-                  </div>
-                  <div className="col col-4" data-label="Payment Status">
-                    <div className="crud__table">
-                      <button
-                        onClick={() => editProtfolio(port?._id)}
-                        className="crud__table__edit"
-                      >
-                        <i className="bx bxs-edit-alt"></i>
-                      </button>
-                      <button
-                        onClick={() => deletePortfolio(port?._id)}
-                        className="crud__table__delete"
-                      >
-                        <i className="bx bx-trash"></i>
-                      </button>
-                    </div>
-                  </div>
+            {total ? (
+              <ul className="responsive-table">
+                <li className="table-header">
+                  <div className="col col-1">Name</div>
+                  <div className="col col-2">url</div>
+                  <div className="col col-3">Photo</div>
+                  <div className="col col-4">ACtions</div>
                 </li>
-              ))}
-            </ul>
+                {portfolios?.map((port) => (
+                  <li key={port._id} className="table-row">
+                    <div className="col col-1" data-label="Job Id">
+                      {port?.name}
+                    </div>
+                    <div className="col col-2" data-label="Customer Name">
+                      <Link to={port?.url}>{port?.url}</Link>
+                    </div>
+                    <div className="col col-2" data-label="Customer Name">
+                      <img
+                        className="avatar"
+                        src={`${ENDPOINT}upload/${port?.photo?._id}.${
+                          port?.photo?.name.split(".")[1]
+                        }`}
+                        alt=""
+                      />
+                    </div>
+                    <div className="col col-4" data-label="Payment Status">
+                      <div className="crud__table">
+                        <button
+                          onClick={() => editProtfolio(port?._id)}
+                          className="crud__table__edit"
+                        >
+                          <i className="bx bxs-edit-alt"></i>
+                        </button>
+                        <button
+                          onClick={() => deletePortfolio(port?._id)}
+                          className="crud__table__delete"
+                        >
+                          <i className="bx bx-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="nodata">
+                <img
+                  src="https://img.freepik.com/free-vector/no-data-concept-illustration_114360-616.jpg?w=740&t=st=1698599363~exp=1698599963~hmac=33aceb8ae26a83c993a9d6d5df58d53385eec1471543b2e718b580cca547bf82"
+                  alt="nodata"
+                />
+              </div>
+            )}
           </div>
 
           <div className="modalik" id={isModalOpen ? "modalik__active" : ""}>
@@ -230,6 +260,13 @@ const PortfoliosPage = () => {
               <button type="submit">Submit</button>
             </form>
           </div>
+          <Pagination
+            defaultCurrent={1}
+            pageSize={LIMIT}
+            total={total}
+            current={page}
+            onChange={handlePageChange}
+          />
         </section>
       )}
     </Fragment>

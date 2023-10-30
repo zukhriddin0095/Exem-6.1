@@ -4,6 +4,7 @@ interface User {
   client: boolean;
   _id: string;
   firstName: string;
+  photo: string;
   lastName: string;
   username: string;
   password: string;

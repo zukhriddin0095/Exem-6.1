@@ -193,3 +193,13 @@ h2 {
     }
   }
 }
+
+
+.nodata {
+  height: 100vh;
+ display: grid;
+ place-items: center;
+ img {
+  width: 50%;
+ }
+}

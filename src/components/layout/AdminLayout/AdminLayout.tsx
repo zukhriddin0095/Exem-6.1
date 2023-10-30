@@ -3,20 +3,19 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
-
 import { TOKEN, USER, USER_ID } from "../../../constants";
 import avatar from "../../../assets/avatar.jpg";
 import request from "../../../server";
 
 import "./style.scss";
+import User from "../../../types/user";
 const AdminLayout = () => {
-  const [activeMenuItem, setActiveMenuItem] = useState("dashboard");
+  const [activeMenuItem, setActiveMenuItem] = useState("/expriences");
   const [sidebarVisible, setSidebarVisible] = useState(true);
-  // const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [userId, setUserId] = useState("");
   const [total, setTotal] = useState<string | number>(0);
-  
-   
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -28,13 +27,26 @@ const AdminLayout = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  // function getUser() {
-  //   const userString = localStorage.getItem(USER);
-  //   if (userString) {
-  //     const parsedUser = JSON.parse(userString);
-  //     setUser(parsedUser);
-  //   }
-  // }
+  useEffect(() => {
+    const pathname = location.pathname;
+    setActiveMenuItem(pathname);
+    getUser();
+  }, []);
+
+  async function getUser() {
+    try {
+      const { data } = await request.get("auth/me", {
+        params: userId,
+      });
+      setUser(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  console.log(userId);
+
+  console.log(user);
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
@@ -46,6 +58,7 @@ const AdminLayout = () => {
 
   function logout() {
     Cookies.remove(TOKEN);
+    Cookies.remove(USER_ID);
     localStorage.removeItem(USER);
     navigate("/login");
   }
@@ -64,17 +77,22 @@ const AdminLayout = () => {
         },
       });
       setTotal(pagination.total);
-    }catch(err) {
+    } catch (err) {
       toast.error("serverda hatolik");
     } finally {
       console.log("success");
-      
     }
   }
 
+  console.log(user);
   const AccountN = () => {
-    navigate('/account')
-  }
+    navigate("/account");
+  };
+
+  const externalUrl = `https://exem-6-2.vercel.app?${userId}`;
+  // const externalUrl = `http://localhost:5174/?${userId}`;
+
+  console.log(user);
 
   return (
     <Fragment>
@@ -84,41 +102,41 @@ const AdminLayout = () => {
           <span className="text">Admin Portfolio</span>
         </Link>
         <ul className="side-menu top">
-          <li className={activeMenuItem === "expriences" ? "active" : ""}>
+          <li className={activeMenuItem === "/expriences" ? "active" : ""}>
             <Link
               to="/expriences"
-              onClick={() => handleMenuItemClick("expriences")}
+              onClick={() => handleMenuItemClick("/expriences")}
             >
               <i className="bx bxs-dashboard"></i>
               <span className="text">expriences</span>
             </Link>
           </li>
-          <li className={activeMenuItem === "skills" ? "active" : ""}>
-            <Link to="/skills" onClick={() => handleMenuItemClick("skills")}>
+          <li className={activeMenuItem === "/skills" ? "active" : ""}>
+            <Link to="/skills" onClick={() => handleMenuItemClick("/skills")}>
               <i className="bx bxl-react"></i>
               <span className="text">Skills</span>
             </Link>
           </li>
-          <li className={activeMenuItem === "portfolios" ? "active" : ""}>
+          <li className={activeMenuItem === "/portfolios" ? "active" : ""}>
             <Link
               to="/portfolios"
-              onClick={() => handleMenuItemClick("portfolios")}
+              onClick={() => handleMenuItemClick("/portfolios")}
             >
               <i className="bx bxl-linkedin-square"></i>
               <span className="text">Portfolios</span>
             </Link>
           </li>
-          <li className={activeMenuItem === "education" ? "active" : ""}>
+          <li className={activeMenuItem === "/education" ? "active" : ""}>
             <Link
               to="/education"
-              onClick={() => handleMenuItemClick("education")}
+              onClick={() => handleMenuItemClick("/education")}
             >
               <i className="bx bxs-bank"></i>
               <span className="text">Education</span>
             </Link>
           </li>
-          <li className={activeMenuItem === "message" ? "active" : ""}>
-            <Link to="/message" onClick={() => handleMenuItemClick("message")}>
+          <li className={activeMenuItem === "/message" ? "active" : ""}>
+            <Link to="/message" onClick={() => handleMenuItemClick("/message")}>
               <i className="bx bxs-shopping-bag-alt"></i>
               <span className="text">Message</span>
             </Link>
@@ -150,7 +168,7 @@ const AdminLayout = () => {
 
           <input type="checkbox" id="switch-mode" hidden />
           <label className="switch-mode"></label>
-          <Link to='/message' className="notification">
+          <Link to="/message" className="notification">
             <i className="bx bxs-bell"></i>
             <span className="num">{total}</span>
           </Link>
@@ -163,11 +181,17 @@ const AdminLayout = () => {
           className="user__modal"
         >
           <div className="user__modal__img">
-            <img src={avatar} alt="avatar" />
+            <img
+              src={
+                `https://ap-portfolio-backend.up.railway.app/upload/${user?.photo}` ||
+                "https://thumbs.dreamstime.com/b/flat-male-avatar-image-beard-hairstyle-businessman-profile-icon-vector-179285629.jpg"
+              }
+              alt="avatar"
+            />
           </div>
           <div className="user__modal__account">
             <button>
-              <Link to="https://sarf.uz">
+              <Link target="_blank" to={externalUrl}>
                 <i className="bx bxs-user-circle"></i> view profile
               </Link>
             </button>
@@ -182,7 +206,7 @@ const AdminLayout = () => {
             </button>
           </div>
           <div className="user__modal__logout">
-            <button>
+            <button onClick={logout}>
               <i className="bx bx-log-out-circle"></i> Logout
             </button>
           </div>

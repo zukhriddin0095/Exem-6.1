@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { LIMIT, USER_ID } from "../../constants";
 import Cookies from "js-cookie";
 import Skill from "../../types/skill";
-
+import { Pagination } from "antd";
 import request from "../../server";
 import AxiosLoading from "../../components/loading/axiosLoading/AxiosLoading";
 import "./style.scss";
@@ -10,7 +10,8 @@ const SkillsPage = () => {
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const [skills, setskills] = useState<Skill[] | null>(null);
-  const [total, setTotal] = useState<string | number>(0);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -35,7 +36,7 @@ const SkillsPage = () => {
       } = await request.get(`skills`, {
         params: {
           user: userId,
-          // page: page,
+          page: page,
           limit: LIMIT,
           search: search,
         },
@@ -104,6 +105,16 @@ const SkillsPage = () => {
     }
   }
 
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    getSkill();
+  };
+
+  const handeSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    getSkill();
+  };
+
   return (
     <Fragment>
       {loading ? (
@@ -116,12 +127,13 @@ const SkillsPage = () => {
               <form>
                 <div className="form-input">
                   <input
+                    value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     type="search"
                     placeholder="Search..."
                   />
                   <button
-                    onClick={getSkill}
+                    onClick={(e) => handeSearch(e)}
                     type="submit"
                     className="search-btn"
                   >
@@ -133,39 +145,48 @@ const SkillsPage = () => {
                 <i className="bx bx-add-to-queue"></i>
               </button>
             </div>
-            <ul className="responsive-table">
-              <li className="table-header">
-                <div className="col col-1">Skill</div>
-                <div className="col col-2">Percent</div>
-                <div className="col col-4">ACtions</div>
-              </li>
-              {skills?.map((skill) => (
-                <li key={skill._id} className="table-row">
-                  <div className="col col-1" data-label="Job Id">
-                    {skill?.name}
-                  </div>
-                  <div className="col col-2" data-label="Customer Name">
-                    {skill?.percent}
-                  </div>
-                  <div className="col col-4" data-label="Payment Status">
-                    <div className="crud__table">
-                      <button
-                        onClick={() => editSkill(skill?._id)}
-                        className="crud__table__edit"
-                      >
-                        <i className="bx bxs-edit-alt"></i>
-                      </button>
-                      <button
-                        onClick={() => deleteSkill(skill?._id)}
-                        className="crud__table__delete"
-                      >
-                        <i className="bx bx-trash"></i>
-                      </button>
-                    </div>
-                  </div>
+            {total ? (
+              <ul className="responsive-table">
+                <li className="table-header">
+                  <div className="col col-1">Skill</div>
+                  <div className="col col-2">Percent</div>
+                  <div className="col col-4">ACtions</div>
                 </li>
-              ))}
-            </ul>
+                {skills?.map((skill) => (
+                  <li key={skill._id} className="table-row">
+                    <div className="col col-1" data-label="Job Id">
+                      {skill?.name}
+                    </div>
+                    <div className="col col-2" data-label="Customer Name">
+                      {skill?.percent}
+                    </div>
+                    <div className="col col-4" data-label="Payment Status">
+                      <div className="crud__table">
+                        <button
+                          onClick={() => editSkill(skill?._id)}
+                          className="crud__table__edit"
+                        >
+                          <i className="bx bxs-edit-alt"></i>
+                        </button>
+                        <button
+                          onClick={() => deleteSkill(skill?._id)}
+                          className="crud__table__delete"
+                        >
+                          <i className="bx bx-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="nodata">
+                <img
+                  src="https://img.freepik.com/free-vector/no-data-concept-illustration_114360-616.jpg?w=740&t=st=1698599363~exp=1698599963~hmac=33aceb8ae26a83c993a9d6d5df58d53385eec1471543b2e718b580cca547bf82"
+                  alt="nodata"
+                />
+              </div>
+            )}
           </div>
 
           <div className="modalik" id={isModalOpen ? "modalik__active" : ""}>
@@ -192,6 +213,13 @@ const SkillsPage = () => {
               <button type="submit">Submit</button>
             </form>
           </div>
+          <Pagination
+            defaultCurrent={1}
+            pageSize={LIMIT}
+            total={total}
+            current={page}
+            onChange={handlePageChange}
+          />
         </section>
       )}
     </Fragment>
